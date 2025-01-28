@@ -4,9 +4,8 @@ import string
 import time
 import logging
 from pyrogram import Client, filters
-from pyrogram.enums import ParseMode
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
-from pyrogram.errors import FloodWait
+
 
 from config import (
     ADMINS, START_MSG, IS_VERIFY, VERIFY_EXPIRE, SHORTLINK_URL, SHORTLINK_API, TUT_VID
@@ -18,16 +17,8 @@ from database import add_user, present_user
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Initialize Pyrogram Bot Client
-app = Client(
-    "verify_bot",  # Session name
-    api_id=24720817,  # API ID from config or your bot configuration
-    api_hash="43669876f7dbd754e157c69c89ebf3eb",  # API Hash from config
-    bot_token="7752549512:AAE1Qeeeh3rWDQeXBN-5Wg1ZKRt8uQMs0is"  # Bot Token from BotFather
-)
 
-# Start command
-@app.on_message(filters.command('start') & filters.private)
+#Add This Code In Start COMMAND And Everywhere Else Where You Want Shortner 
 async def start_command(client: Client, message: Message):
     user_id = message.from_user.id
     text = message.text
@@ -85,7 +76,7 @@ async def start_command(client: Client, message: Message):
             await message.reply(f"Please verify yourself to use the bot.\nToken will expire in {get_exp_time(VERIFY_EXPIRE)}.", reply_markup=InlineKeyboardMarkup(btn))
 
 # Verification handler
-@app.on_message(filters.regex(r'^/start verify_') & filters.private)
+#Must  Add This Code In Start COMMAND
 async def verify_command(client: Client, message: Message):
     user_id = message.from_user.id
     token = message.text.split("_", 1)[1]  # Extract the token part after "verify_"
@@ -97,8 +88,3 @@ async def verify_command(client: Client, message: Message):
     else:
         await message.reply("Invalid or expired token. Please try again.")
 
-
-
-# Run the bot
-if __name__ == '__main__':
-    app.run()
